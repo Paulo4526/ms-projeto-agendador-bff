@@ -19,7 +19,7 @@ public interface UsuarioClient {
     @GetMapping("/usuario")
     ShowUsuarioDTO buscaUsuarioPorEmail(@RequestParam("email") String email, @RequestHeader("Authorization") String token);
 
-    @PostMapping
+    @PostMapping("/usuario")
     ShowUsuarioDTO salvaUsuario(@RequestBody UsuarioDTO usuarioDTO);
 
     @PostMapping("/usuario/login")
