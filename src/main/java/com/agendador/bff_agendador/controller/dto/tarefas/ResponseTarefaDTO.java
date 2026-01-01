@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ShowTarefaDTO {
+public class ResponseTarefaDTO {
     private String id;
     private String nomeTarefa;
     private String descricao;

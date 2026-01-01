@@ -10,7 +10,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ShowTelefoneDTO {
+public class ResponseTelefoneDTO {
     private UUID id;
     private Integer numero;
     private Integer ddd;

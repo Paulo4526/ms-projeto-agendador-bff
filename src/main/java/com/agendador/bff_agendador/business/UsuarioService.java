@@ -1,13 +1,13 @@
 package com.agendador.bff_agendador.business;
 
-import com.agendador.bff_agendador.controller.dto.endereco.EnderecoDTO;
-import com.agendador.bff_agendador.controller.dto.endereco.ShowEnderecoDTO;
-import com.agendador.bff_agendador.controller.dto.login.LoginDTO;
-import com.agendador.bff_agendador.controller.dto.login.TokenDTO;
-import com.agendador.bff_agendador.controller.dto.telefone.ShowTelefoneDTO;
-import com.agendador.bff_agendador.controller.dto.telefone.TelefoneDTO;
-import com.agendador.bff_agendador.controller.dto.usuario.ShowUsuarioDTO;
-import com.agendador.bff_agendador.controller.dto.usuario.UsuarioDTO;
+import com.agendador.bff_agendador.controller.dto.endereco.RequestEnderecoDTO;
+import com.agendador.bff_agendador.controller.dto.endereco.ResponseEnderecoDTO;
+import com.agendador.bff_agendador.controller.dto.login.RequestLoginDTO;
+import com.agendador.bff_agendador.controller.dto.login.ResponseTokenDTO;
+import com.agendador.bff_agendador.controller.dto.telefone.ResponseTelefoneDTO;
+import com.agendador.bff_agendador.controller.dto.telefone.RequestTelefoneDTO;
+import com.agendador.bff_agendador.controller.dto.usuario.ResponseUsuarioDTO;
+import com.agendador.bff_agendador.controller.dto.usuario.RequestUsuarioDTO;
 import com.agendador.bff_agendador.infrastructure.client.UsuarioClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,15 +19,15 @@ import java.util.UUID;
 public class UsuarioService {
     private final UsuarioClient usuarioClient;
 
-    public ShowUsuarioDTO salvaUsuario(UsuarioDTO usuarioDTO){
-        return usuarioClient.salvaUsuario(usuarioDTO);
+    public ResponseUsuarioDTO salvaUsuario(RequestUsuarioDTO requestUsuarioDTO){
+        return usuarioClient.salvaUsuario(requestUsuarioDTO);
     }
 
-    public TokenDTO login (LoginDTO loginDTO){
-        return usuarioClient.login(loginDTO);
+    public ResponseTokenDTO login (RequestLoginDTO requestLoginDTO){
+        return usuarioClient.login(requestLoginDTO);
     }
 
-    public ShowUsuarioDTO findUserByEmail(String email, String token){
+    public ResponseUsuarioDTO findUserByEmail(String email, String token){
         return usuarioClient.findUserByEmail(email, token);
     }
 
@@ -35,15 +35,15 @@ public class UsuarioService {
         return usuarioClient.deleteUserByEmail(email, token);
     }
 
-    public ShowUsuarioDTO atualizaUsuario(String token, UsuarioDTO usuarioDTO){
-        return usuarioClient.atualizaUsuario(token, usuarioDTO);
+    public ResponseUsuarioDTO atualizaUsuario(String token, RequestUsuarioDTO requestUsuarioDTO){
+        return usuarioClient.atualizaUsuario(token, requestUsuarioDTO);
     }
 
-    public ShowEnderecoDTO atualizaEndereco(EnderecoDTO enderecoDTO, UUID uuid, String token){
-        return  usuarioClient.atualizaEndereco(enderecoDTO, uuid, token);
+    public ResponseEnderecoDTO atualizaEndereco(RequestEnderecoDTO requestEnderecoDTO, UUID uuid, String token){
+        return  usuarioClient.atualizaEndereco(requestEnderecoDTO, uuid, token);
     }
 
-    public ShowEnderecoDTO buscaEnderecoById(UUID id, String token){
+    public ResponseEnderecoDTO buscaEnderecoById(UUID id, String token){
         return  usuarioClient.buscaEnderecoById(id, token);
     }
 
@@ -51,15 +51,15 @@ public class UsuarioService {
         return usuarioClient.deleteEnderecoById(id, token);
     }
 
-    public ShowEnderecoDTO cadastraNovoEndereco(String token, EnderecoDTO enderecoDTO){
-        return usuarioClient.cadastraNovoEndereco(token, enderecoDTO);
+    public ResponseEnderecoDTO cadastraNovoEndereco(String token, RequestEnderecoDTO requestEnderecoDTO){
+        return usuarioClient.cadastraNovoEndereco(token, requestEnderecoDTO);
     }
 
-    public ShowTelefoneDTO atualizaTelefone(TelefoneDTO telefoneDTO, UUID id, String token){
-        return usuarioClient.atualizaTelefone(telefoneDTO, id, token);
+    public ResponseTelefoneDTO atualizaTelefone(RequestTelefoneDTO requestTelefoneDTO, UUID id, String token){
+        return usuarioClient.atualizaTelefone(requestTelefoneDTO, id, token);
     }
 
-    public ShowTelefoneDTO buscaTelefoneById(UUID id, String token){
+    public ResponseTelefoneDTO buscaTelefoneById(UUID id, String token){
         return usuarioClient.buscaTelefoneById(id, token);
     }
 
@@ -67,7 +67,7 @@ public class UsuarioService {
         return usuarioClient.deleteTelefoneById(id, token);
     }
 
-    public ShowTelefoneDTO cadastraNovoTelefone(String token, TelefoneDTO telefoneDTO){
-        return usuarioClient.cadastraNovoTelefone(token, telefoneDTO);
+    public ResponseTelefoneDTO cadastraNovoTelefone(String token, RequestTelefoneDTO requestTelefoneDTO){
+        return usuarioClient.cadastraNovoTelefone(token, requestTelefoneDTO);
     }
 }

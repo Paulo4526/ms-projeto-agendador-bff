@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TelefoneDTO {
+public class RequestTelefoneDTO {
 
     private Integer numero;
     private Integer ddd;
