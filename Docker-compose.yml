@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  api:
+    container_name: api-agendador-bff
+    build: .
+    restart: on-failure
+    ports:
+      - "8083:8080"
+    environment:
+      #OBS: O host.docker.internal é a porta onde está rodando a aplicação do container ou seja 8080, o 8080 ou o 8081 após os 2 pontos é o direcionamento da chamada, que na interena será feita pela 8080, e dependento do ms será feito na externa pelo 8080 ou 8081.
+      #Apontamento do container para a porta externa 8080
+      USUARIO_URL: http://host.docker.internal:8080
+      #Apontamento do container para a porta externa 8081
+      TAREFA_URL: http://host.docker.internal:8081
+      #Apontamento do container para a porta externa 8085
+      EMAIL_URL: http://host.docker.internal:8085
+    networks:
+      - agendador-bff
+
+networks:
+  agendador-bff:
+    driver: bridge
