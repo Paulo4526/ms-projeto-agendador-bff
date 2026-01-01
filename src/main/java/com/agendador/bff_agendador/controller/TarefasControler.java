@@ -1,8 +1,8 @@
 package com.agendador.bff_agendador.controller;
 
 import com.agendador.bff_agendador.business.TarefaService;
-import com.agendador.bff_agendador.controller.dto.tarefas.ShowTarefaDTO;
-import com.agendador.bff_agendador.controller.dto.tarefas.TarefasDTO;
+import com.agendador.bff_agendador.controller.dto.tarefas.ResponseTarefaDTO;
+import com.agendador.bff_agendador.controller.dto.tarefas.RequestTarefaDTO;
 import com.agendador.bff_agendador.infrastructure.configs.security.SecurityConfig;
 import com.agendador.bff_agendador.infrastructure.enums.StatusNotificacaoEnum;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,13 +32,14 @@ public class TarefasControler {
     @Operation(summary = "Salva novas tarefas", description = "Cria uma nova tarefa")
     @ApiResponse(responseCode = "201", description = "Tarefa criada com sucesso!")
     @ApiResponse(responseCode = "403", description = "Operação não permitida/indevida")
+    @ApiResponse(responseCode = "401", description = "Credenciais do usuário inválidas!")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
-    public ResponseEntity<ShowTarefaDTO> gravaTarefa(
-            @RequestBody TarefasDTO tarefasDTO,
+    public ResponseEntity<ResponseTarefaDTO> gravaTarefa(
+            @RequestBody RequestTarefaDTO requestTarefaDTO,
             //Utilizar essa forma de anotação somente quando estivermos utilizando o swagger
             @RequestHeader(name = "Authorization", required = false) String token){
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(tarefaService.gravarTarefa(tarefasDTO, token));
+        return ResponseEntity.status(HttpStatus.CREATED).body(tarefaService.gravarTarefa(requestTarefaDTO, token));
 
     }
 
@@ -46,8 +47,9 @@ public class TarefasControler {
     @Operation(summary = "Busca tarefas por periodo", description = "Busca tarefas por periodo")
     @ApiResponse(responseCode = "200", description = "Tarefas encontradas")
     @ApiResponse(responseCode = "403", description = "Operação não permitida/indevida")
+    @ApiResponse(responseCode = "401", description = "Credenciais do usuário inválidas!")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
-    public ResponseEntity<List<ShowTarefaDTO>> listarTarefasAgendadasEntreDatas(
+    public ResponseEntity<List<ResponseTarefaDTO>> listarTarefasAgendadasEntreDatas(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataEventoInicio,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataEventoFinal,
             //Utilizar essa forma de anotação somente quando estivermos utilizando o swagger
@@ -61,8 +63,9 @@ public class TarefasControler {
     @Operation(summary = "Busca tarefas por email de usuario", description = "Buscando tarefas pelo email de usuario")
     @ApiResponse(responseCode = "200", description = "Tarefas encontradas")
     @ApiResponse(responseCode = "403", description = "Operação não permitida/indevida")
+    @ApiResponse(responseCode = "401", description = "Credenciais do usuário inválidas!")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
-    public ResponseEntity<List<ShowTarefaDTO>> buscarTarefasPeloEmail(
+    public ResponseEntity<List<ResponseTarefaDTO>> buscarTarefasPeloEmail(
             //Utilizar essa forma de anotação somente quando estivermos utilizando o swagger
             @RequestHeader(name = "Authorization", required = false) String token){
         return ResponseEntity.ok(tarefaService.buscarTarefasPeloEmail(token));
@@ -73,6 +76,7 @@ public class TarefasControler {
     @ApiResponse(responseCode = "204", description = "Tarefa deletada com sucesso!")
     @ApiResponse(responseCode = "404", description = "Tarefa não encontrada")
     @ApiResponse(responseCode = "403", description = "Operação não permitida/indevida")
+    @ApiResponse(responseCode = "401", description = "Credenciais do usuário inválidas!")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
     public ResponseEntity<Void> deleteById(
             @RequestParam("id") String id,
@@ -86,10 +90,11 @@ public class TarefasControler {
     @PatchMapping("/status")
     @Operation(summary = "Altera status da tarefa", description = "Altera status da tarefa")
     @ApiResponse(responseCode = "200", description = "Tarefa alterada com sucesso!")
-    @ApiResponse(responseCode = "400", description = "Tarefa não encontrada")
+    @ApiResponse(responseCode = "409", description = "Tarefa não encontrada")
     @ApiResponse(responseCode = "403", description = "Operação não permitida/indevida")
+    @ApiResponse(responseCode = "401", description = "Credenciais do usuário inválidas!")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
-    public ResponseEntity<ShowTarefaDTO> alteraStatusNotificacao(
+    public ResponseEntity<ResponseTarefaDTO> alteraStatusNotificacao(
             @RequestParam("status") StatusNotificacaoEnum status,
             @RequestParam("id") String id,
             //Utilizar essa forma de anotação somente quando estivermos utilizando o swagger
@@ -101,15 +106,16 @@ public class TarefasControler {
     @PutMapping("/updateTask")
     @Operation(summary = "Altera dados da tarefa", description = "Altera dados da tarefa")
     @ApiResponse(responseCode = "200", description = "Terefa atualizada com sucesso!")
-    @ApiResponse(responseCode = "400", description = "Tarefa não encontrada")
+    @ApiResponse(responseCode = "409", description = "Tarefa não encontrada")
     @ApiResponse(responseCode = "403", description = "Operação não permitida/indevida")
+    @ApiResponse(responseCode = "401", description = "Credenciais do usuário inválidas!")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
-    public ResponseEntity<ShowTarefaDTO> alteraTarefas(
-            @RequestBody TarefasDTO tarefasDTO,
+    public ResponseEntity<ResponseTarefaDTO> alteraTarefas(
+            @RequestBody RequestTarefaDTO requestTarefaDTO,
             @RequestParam("id") String id,
             //Utilizar essa forma de anotação somente quando estivermos utilizando o swagger
             @RequestHeader(name = "Authorization", required = false) String token){
 
-        return ResponseEntity.ok(tarefaService.updateTarefas(tarefasDTO, id, token));
+        return ResponseEntity.ok(tarefaService.updateTarefas(requestTarefaDTO, id, token));
     }
 }

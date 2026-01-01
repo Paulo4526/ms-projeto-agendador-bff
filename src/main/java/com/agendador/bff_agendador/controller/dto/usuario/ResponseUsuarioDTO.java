@@ -1,8 +1,8 @@
 package com.agendador.bff_agendador.controller.dto.usuario;
 
 
-import com.agendador.bff_agendador.controller.dto.endereco.ShowEnderecoDTO;
-import com.agendador.bff_agendador.controller.dto.telefone.ShowTelefoneDTO;
+import com.agendador.bff_agendador.controller.dto.endereco.ResponseEnderecoDTO;
+import com.agendador.bff_agendador.controller.dto.telefone.ResponseTelefoneDTO;
 import lombok.*;
 
 import java.util.List;
@@ -13,14 +13,14 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ShowUsuarioDTO {
+public class ResponseUsuarioDTO {
 
     private UUID id;
     private String nome;
     private String email;
     private String senha;
     private Integer idade;
-    private List<ShowEnderecoDTO> enderecos;
-    private List<ShowTelefoneDTO> telefones;
+    private List<ResponseEnderecoDTO> enderecos;
+    private List<ResponseTelefoneDTO> telefones;
 
 }

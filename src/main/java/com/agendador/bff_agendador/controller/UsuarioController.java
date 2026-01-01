@@ -1,14 +1,14 @@
 package com.agendador.bff_agendador.controller;
 
 import com.agendador.bff_agendador.business.UsuarioService;
-import com.agendador.bff_agendador.controller.dto.endereco.EnderecoDTO;
-import com.agendador.bff_agendador.controller.dto.endereco.ShowEnderecoDTO;
-import com.agendador.bff_agendador.controller.dto.login.LoginDTO;
-import com.agendador.bff_agendador.controller.dto.login.TokenDTO;
-import com.agendador.bff_agendador.controller.dto.telefone.ShowTelefoneDTO;
-import com.agendador.bff_agendador.controller.dto.telefone.TelefoneDTO;
-import com.agendador.bff_agendador.controller.dto.usuario.ShowUsuarioDTO;
-import com.agendador.bff_agendador.controller.dto.usuario.UsuarioDTO;
+import com.agendador.bff_agendador.controller.dto.endereco.RequestEnderecoDTO;
+import com.agendador.bff_agendador.controller.dto.endereco.ResponseEnderecoDTO;
+import com.agendador.bff_agendador.controller.dto.login.RequestLoginDTO;
+import com.agendador.bff_agendador.controller.dto.login.ResponseTokenDTO;
+import com.agendador.bff_agendador.controller.dto.telefone.ResponseTelefoneDTO;
+import com.agendador.bff_agendador.controller.dto.telefone.RequestTelefoneDTO;
+import com.agendador.bff_agendador.controller.dto.usuario.ResponseUsuarioDTO;
+import com.agendador.bff_agendador.controller.dto.usuario.RequestUsuarioDTO;
 import com.agendador.bff_agendador.infrastructure.configs.security.SecurityConfig;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -35,11 +35,11 @@ public class UsuarioController {
     //Dentro da anotação operation do Swagger, o parametro "security={}" remove a obrigatoriedade desse end-point ser autenticado
     @Operation(summary = "Salva usuários", description = "Cria um novo usuário", security = {})
     @ApiResponse(responseCode = "201", description = "Usuário salvo com sucesso")
-    @ApiResponse(responseCode = "400", description = "Usuário já cadastrado")
+    @ApiResponse(responseCode = "409", description = "Usuário já cadastrado")
     @ApiResponse(responseCode = "403", description = "Operação não permitida/indevida")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
-    public ResponseEntity<ShowUsuarioDTO> salvaUsuario(@RequestBody UsuarioDTO usuarioDTO){
-        ShowUsuarioDTO salvo = usuarioService.salvaUsuario(usuarioDTO);
+    public ResponseEntity<ResponseUsuarioDTO> salvaUsuario(@RequestBody RequestUsuarioDTO requestUsuarioDTO){
+        ResponseUsuarioDTO salvo = usuarioService.salvaUsuario(requestUsuarioDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
 
@@ -47,11 +47,12 @@ public class UsuarioController {
     //Dentro da anotação operation do Swagger, o parametro "security={}" remove a obrigatoriedade desse end-point ser autenticado
     @Operation(summary = "Faz login", description = "Faz login com usuário e senha", security = {})
     @ApiResponse(responseCode = "200", description = "Usuário logado com sucesso")
-    @ApiResponse(responseCode = "400", description = "Credenciais inválidas")
+    @ApiResponse(responseCode = "409", description = "Credenciais inválidas")
     @ApiResponse(responseCode = "403", description = "Operação não permitida/indevida")
+    @ApiResponse(responseCode = "401", description = "Credenciais do usuário inválidas!")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
-    public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO loginDTO){
-        return ResponseEntity.ok(usuarioService.login(loginDTO));
+    public ResponseEntity<ResponseTokenDTO> login(@RequestBody RequestLoginDTO requestLoginDTO){
+        return ResponseEntity.ok(usuarioService.login(requestLoginDTO));
     }
 
     @GetMapping("/{email}")
@@ -59,8 +60,9 @@ public class UsuarioController {
     @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso!")
     @ApiResponse(responseCode = "404", description = "Usuário informado é inválido!")
     @ApiResponse(responseCode = "403", description = "Operação não permitida/indevida")
+    @ApiResponse(responseCode = "401", description = "Credenciais do usuário inválidas!")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
-    public ResponseEntity<ShowUsuarioDTO> findUserByEmail(
+    public ResponseEntity<ResponseUsuarioDTO> findUserByEmail(
             @PathVariable String email,
             //Utilizar essa forma de anotação somente quando estivermos utilizando o swagger
             @RequestHeader(name = "Authorization", required = false) String token){
@@ -72,6 +74,7 @@ public class UsuarioController {
     @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso!")
     @ApiResponse(responseCode = "404", description = "Usuário informado é inválido!")
     @ApiResponse(responseCode = "403", description = "Operação não permitida/indevida")
+    @ApiResponse(responseCode = "401", description = "Credenciais do usuário inválidas!")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
     public ResponseEntity<Void> deleteUserByEmail0
             (@PathVariable String email,
@@ -86,12 +89,13 @@ public class UsuarioController {
     @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso!")
     @ApiResponse(responseCode = "404", description = "Usuário informado é inválido!")
     @ApiResponse(responseCode = "403", description = "Operação não permitida/indevida")
+    @ApiResponse(responseCode = "401", description = "Credenciais do usuário inválidas!")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
-    public ResponseEntity<ShowUsuarioDTO> atualizaUsuario(
+    public ResponseEntity<ResponseUsuarioDTO> atualizaUsuario(
             //Utilizar essa forma de anotação somente quando estivermos utilizando o swagger
             @RequestHeader(name = "Authorization", required = false) String token,
-            @RequestBody UsuarioDTO usuarioDTO){
-        return ResponseEntity.ok(usuarioService.atualizaUsuario(token, usuarioDTO));
+            @RequestBody RequestUsuarioDTO requestUsuarioDTO){
+        return ResponseEntity.ok(usuarioService.atualizaUsuario(token, requestUsuarioDTO));
     }
 
     @PutMapping("/endereco")
@@ -99,13 +103,14 @@ public class UsuarioController {
     @ApiResponse(responseCode = "200", description = "Endereço Atualizado com sucesso!")
     @ApiResponse(responseCode = "404", description = "Id de endereço informado é inválido!")
     @ApiResponse(responseCode = "403", description = "Operação não permitida/indevida")
+    @ApiResponse(responseCode = "401", description = "Credenciais do usuário inválidas!")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
-    public ResponseEntity<ShowEnderecoDTO> atualizaEndereco(
-            @RequestBody EnderecoDTO enderecoDTO,
+    public ResponseEntity<ResponseEnderecoDTO> atualizaEndereco(
+            @RequestBody RequestEnderecoDTO requestEnderecoDTO,
             @RequestParam("enderecoId") UUID id,
             //Utilizar essa forma de anotação somente quando estivermos utilizando o swagger
             @RequestHeader(name = "Authorization", required = false) String token){
-        return ResponseEntity.ok(usuarioService.atualizaEndereco(enderecoDTO, id, token));
+        return ResponseEntity.ok(usuarioService.atualizaEndereco(requestEnderecoDTO, id, token));
     }
 
     @GetMapping("/endereco")
@@ -113,8 +118,9 @@ public class UsuarioController {
     @ApiResponse(responseCode = "200", description = "Endereço consultado com sucesso!")
     @ApiResponse(responseCode = "404", description = "Id de endereço informado é inválido!")
     @ApiResponse(responseCode = "403", description = "Operação não permitida/indevida")
+    @ApiResponse(responseCode = "401", description = "Credenciais do usuário inválidas!")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
-    public ResponseEntity<ShowEnderecoDTO> buscaEnderecoById(
+    public ResponseEntity<ResponseEnderecoDTO> buscaEnderecoById(
             @RequestParam("enderecoId") UUID id,
             //Utilizar essa forma de anotação somente quando estivermos utilizando o swagger
             @RequestHeader(name = "Authorization", required = false) String token){
@@ -126,6 +132,7 @@ public class UsuarioController {
     @ApiResponse(responseCode = "204", description = "Endereço deletado com sucesso!")
     @ApiResponse(responseCode = "404", description = "Id de endereço informado é inválido!")
     @ApiResponse(responseCode = "403", description = "Operação não permitida/indevida")
+    @ApiResponse(responseCode = "401", description = "Credenciais do usuário inválidas!")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
     public ResponseEntity<Void> deleteEnderecoById(
             @RequestParam("enderecoId") UUID id,
@@ -139,12 +146,13 @@ public class UsuarioController {
     @Operation(summary = "Cadastra dados de um novo endereço", description = "Realiza cadastro de um novo endereço")
     @ApiResponse(responseCode = "201", description = "Endereço cadastrado com sucesso!")
     @ApiResponse(responseCode = "403", description = "Operação não permitida/indevida")
+    @ApiResponse(responseCode = "401", description = "Credenciais do usuário inválidas!")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
-    public ResponseEntity<ShowEnderecoDTO> cadastraNovoEndereco(
+    public ResponseEntity<ResponseEnderecoDTO> cadastraNovoEndereco(
             //Utilizar essa forma de anotação somente quando estivermos utilizando o swagger
             @RequestHeader(name = "Authorization", required = false) String token,
-            @RequestBody EnderecoDTO enderecoDTO){
-        ShowEnderecoDTO salvo = usuarioService.cadastraNovoEndereco(token, enderecoDTO);
+            @RequestBody RequestEnderecoDTO requestEnderecoDTO){
+        ResponseEnderecoDTO salvo = usuarioService.cadastraNovoEndereco(token, requestEnderecoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
 
@@ -153,13 +161,14 @@ public class UsuarioController {
     @ApiResponse(responseCode = "200", description = "Telefone Atualizado com sucesso!")
     @ApiResponse(responseCode = "404", description = "Id de telefone informado é inválido!")
     @ApiResponse(responseCode = "403", description = "Operação não permitida/indevida")
+    @ApiResponse(responseCode = "401", description = "Credenciais do usuário inválidas!")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
-    public ResponseEntity<ShowTelefoneDTO> atualizaTelefone(
-            @RequestBody TelefoneDTO telefoneDTO,
+    public ResponseEntity<ResponseTelefoneDTO> atualizaTelefone(
+            @RequestBody RequestTelefoneDTO requestTelefoneDTO,
             @RequestParam("telefoneId") UUID id,
             //Utilizar essa forma de anotação somente quando estivermos utilizando o swagger
             @RequestHeader(name = "Authorization", required = false) String token){
-        return ResponseEntity.ok(usuarioService.atualizaTelefone(telefoneDTO, id, token));
+        return ResponseEntity.ok(usuarioService.atualizaTelefone(requestTelefoneDTO, id, token));
     }
 
     @GetMapping("/telefone")
@@ -167,8 +176,9 @@ public class UsuarioController {
     @ApiResponse(responseCode = "200", description = "Telefone encontrado com sucesso!")
     @ApiResponse(responseCode = "404", description = "Id de telefone informado é inválido!")
     @ApiResponse(responseCode = "403", description = "Operação não permitida/indevida")
+    @ApiResponse(responseCode = "401", description = "Credenciais do usuário inválidas!")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
-    public ResponseEntity<ShowTelefoneDTO> buscaTelefoneById(
+    public ResponseEntity<ResponseTelefoneDTO> buscaTelefoneById(
             @RequestParam("telefoneId") UUID id,
             //Utilizar essa forma de anotação somente quando estivermos utilizando o swagger
             @RequestHeader(name = "Authorization", required = false) String token){
@@ -180,6 +190,7 @@ public class UsuarioController {
     @ApiResponse(responseCode = "204", description = "Telefone deletado com sucesso!")
     @ApiResponse(responseCode = "404", description = "Id de telefone informado é inválido!")
     @ApiResponse(responseCode = "403", description = "Operação não permitida/indevida")
+    @ApiResponse(responseCode = "401", description = "Credenciais do usuário inválidas!")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
     public ResponseEntity<Void> deleteTelefoneById(
             @RequestParam("telefoneId") UUID id,
@@ -193,12 +204,13 @@ public class UsuarioController {
     @Operation(summary = "Cadastra novos dados de telefone", description = "Realiza o cadastro de novos dados do telefone")
     @ApiResponse(responseCode = "201", description = "Telefone cadastrado com sucesso!")
     @ApiResponse(responseCode = "403", description = "Operação não permitida/indevida")
+    @ApiResponse(responseCode = "401", description = "Credenciais do usuário inválidas!")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
-    public ResponseEntity<ShowTelefoneDTO> cadastraNovoTelefone(
+    public ResponseEntity<ResponseTelefoneDTO> cadastraNovoTelefone(
             //Utilizar essa forma de anotação somente quando estivermos utilizando o swagger
             @RequestHeader(name = "Authorization", required = false) String token,
-            @RequestBody TelefoneDTO telefoneDTO){
-        ShowTelefoneDTO salvo = usuarioService.cadastraNovoTelefone(token, telefoneDTO);
+            @RequestBody RequestTelefoneDTO requestTelefoneDTO){
+        ResponseTelefoneDTO salvo = usuarioService.cadastraNovoTelefone(token, requestTelefoneDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
 }
