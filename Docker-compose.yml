@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-  api:
+  ms-agendador-bff:
     container_name: api-agendador-bff
     build: .
     restart: on-failure

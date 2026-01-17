@@ -27,8 +27,8 @@ public class UsuarioService {
         return usuarioClient.login(requestLoginDTO);
     }
 
-    public ResponseUsuarioDTO findUserByEmail(String email, String token){
-        return usuarioClient.findUserByEmail(email, token);
+    public ResponseUsuarioDTO findUserByEmail(String token){
+        return usuarioClient.findUserByEmail(token);
     }
 
     public Void deleteUserByEmail(String email, String token){

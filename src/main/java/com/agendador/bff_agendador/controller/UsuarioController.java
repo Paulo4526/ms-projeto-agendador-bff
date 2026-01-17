@@ -55,7 +55,7 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.login(requestLoginDTO));
     }
 
-    @GetMapping("/{email}")
+    @GetMapping()
     @Operation(summary = "Procura usuário pelo email", description = "Realiza consulta e retorna o usuário pelo email")
     @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso!")
     @ApiResponse(responseCode = "404", description = "Usuário informado é inválido!")
@@ -63,10 +63,9 @@ public class UsuarioController {
     @ApiResponse(responseCode = "401", description = "Credenciais do usuário inválidas!")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
     public ResponseEntity<ResponseUsuarioDTO> findUserByEmail(
-            @PathVariable String email,
             //Utilizar essa forma de anotação somente quando estivermos utilizando o swagger
             @RequestHeader(name = "Authorization", required = false) String token){
-        return ResponseEntity.ok(usuarioService.findUserByEmail(email, token));
+        return ResponseEntity.ok(usuarioService.findUserByEmail(token));
     }
 
     @DeleteMapping("/{email}")

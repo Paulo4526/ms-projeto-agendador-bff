@@ -17,17 +17,14 @@ import java.util.UUID;
 @FeignClient(name = "usuario", url = "${usuario.url}")
 public interface UsuarioClient {
 
-    @GetMapping("/usuario")
-    ResponseUsuarioDTO buscaUsuarioPorEmail(@RequestParam("email") String email, @RequestHeader("Authorization") String token);
-
     @PostMapping("/usuario")
     ResponseUsuarioDTO salvaUsuario(@RequestBody RequestUsuarioDTO requestUsuarioDTO);
 
     @PostMapping("/usuario/login")
     ResponseTokenDTO login(@RequestBody RequestLoginDTO requestLoginDTO);
 
-    @GetMapping("/usuario/{email}")
-    ResponseUsuarioDTO findUserByEmail(@PathVariable String email, @RequestHeader("Authorization") String token);
+    @GetMapping("/usuario")
+    ResponseUsuarioDTO findUserByEmail(@RequestHeader("Authorization") String token);
 
     @DeleteMapping("/usuario/{email}")
     Void deleteUserByEmail(@PathVariable String email, @RequestHeader("Authorization") String token);
