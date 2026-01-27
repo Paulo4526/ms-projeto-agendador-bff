@@ -114,7 +114,7 @@
 
 <h3>🚀 Subir a aplicação com Docker Compose</h3>
 
-<pre><code>docker compose build api .</code></pre>
+<pre><code>docker compose build ms-agendador-bff</code></pre>
 <pre><code>docker compose up -d</code></pre>
 
 <p>
