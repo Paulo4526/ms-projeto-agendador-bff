@@ -33,33 +33,63 @@
 
 <hr>
 
-<h2>🧩 Papel na Arquitetura</h2>
+<h2>🧩 Arquitetura do Projeto Agendador</h2>
 
-<ul>
+<p>
+  O <strong>Projeto Agendador</strong> é composto por <strong>4 microsserviços</strong>,
+  que trabalham de forma integrada e devem ser iniciados em uma
+  <strong>ordem específica</strong> para garantir o funcionamento correto do sistema.
+</p>
+
+<h3>📌 Ordem de Execução dos Microsserviços</h3>
+
+<ol>
   <li>
-    Consome o <strong>ms-projeto-agendador-usuario</strong> para autenticação<br>
-    🔗
+    <strong>ms-projeto-agendador-usuario</strong><br>
+    Microsserviço <strong>principal</strong> e <strong>obrigatório</strong>, responsável
+    por autenticação, autorização e gestão de usuários.<br>
+    <em>Deve estar em execução antes de todos os outros serviços.</em>
+    🔗 Repositório:
     <a href="https://github.com/Paulo4526/ms-projeto-agendador-usuario" target="_blank">
-      https://github.com/Paulo4526/ms-projeto-agendador-usuario
+      https://github.com/Paulo4526/ms-projeto-agendador-bff
     </a>
   </li>
+  <br>
 
   <li>
-    Orquestra chamadas ao <strong>ms-projeto-agendador-tarefas</strong><br>
-    🔗
+    <strong>ms-projeto-agendador-tarefas</strong><br>
+    Responsável pelo agendamento e gerenciamento de tarefas, consumindo
+    autenticação do microsserviço de usuários.<br>
+    🔗 Repositório:
     <a href="https://github.com/Paulo4526/ms-projeto-agendador-tarefas" target="_blank">
       https://github.com/Paulo4526/ms-projeto-agendador-tarefas
     </a>
   </li>
+  <br>
 
   <li>
-    Integra-se ao <strong>ms-projeto-agendador-notificacao</strong><br>
-    🔗
+    <strong>ms-projeto-agendador-notificacao</strong><br>
+    Microsserviço responsável pelo envio de notificações (e-mails),
+    acionado a partir dos eventos de tarefas.<br>
+    🔗 Repositório:
     <a href="https://github.com/Paulo4526/ms-projeto-agendador-notificacao" target="_blank">
       https://github.com/Paulo4526/ms-projeto-agendador-notificacao
     </a>
   </li>
-</ul>
+  <br>
+
+  <li>
+    <strong>ms-projeto-agendador-bff</strong><br>
+    Backend for Frontend responsável por centralizar, orquestrar e expor
+    as APIs para o frontend, consumindo os demais microsserviços.<br>
+  </li>
+</ol>
+
+<p>
+  ⚠️ <strong>Importante:</strong> A aplicação deve ser executada exatamente
+  na ordem acima, pois cada microsserviço depende dos anteriores
+  para autenticação, comunicação e processamento correto.
+</p>
 
 <p>
   ⚠️ Este microsserviço deve ser iniciado <strong>por último</strong>,
