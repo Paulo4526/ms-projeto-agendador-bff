@@ -48,7 +48,7 @@
     <strong>ms-projeto-agendador-usuario</strong><br>
     Microsserviço <strong>principal</strong> e <strong>obrigatório</strong>, responsável
     por autenticação, autorização e gestão de usuários.<br>
-    <em>Deve estar em execução antes de todos os outros serviços.</em>
+    <em>Deve estar em execução antes de todos os outros serviços.</em><br>
     🔗 Repositório:
     <a href="https://github.com/Paulo4526/ms-projeto-agendador-usuario" target="_blank">
       https://github.com/Paulo4526/ms-projeto-agendador-bff
